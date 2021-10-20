@@ -89,14 +89,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
         if (ViewCompat.getLayoutDirection(requireView()) == ViewCompat.LAYOUT_DIRECTION_LTR) {
             //IF LEFT TO RIGHT
-            Prefs.putString(AppConstants.LANGUAGE,"arabic");
+            Prefs.putString(AppConstants.LANGUAGE,AppConstants.LANGUAGE_ARABIC);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
                 requireActivity().getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             }
         }
         else {
             //IF RIGHT TO LEFT
-            Prefs.putString(AppConstants.LANGUAGE,"english");
+            Prefs.putString(AppConstants.LANGUAGE,AppConstants.LANGUAGE_ENGLISH);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
                 requireActivity().getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             }

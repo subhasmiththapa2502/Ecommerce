@@ -5,20 +5,14 @@
     android:orientation="horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<ImageView
-    android:id="@+id/locationIv"
-    android:contentDescription="@string/add_address"
-    android:layout_width="24dp"
-    android:layout_margin="10dp"
-    android:layout_gravity="center"
-    android:src="@drawable/ic_baseline_my_location_24"
-    android:layout_height="24dp"/>
 
     <TextView
+        android:drawableStart="@drawable/ic_baseline_my_location_24"
         android:id="@+id/locationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:gravity="start"
+        android:gravity="start|center"
+        android:drawablePadding="10dp"
         tools:text="Test Data asdasdasdasdsadasdsadkagsdkjashdkjashdkashdkashdksahkasjhaskjdhkasjdhkaskjjaksdhkhkashdkjsadhkjasd" />
 </androidx.appcompat.widget.LinearLayoutCompat>

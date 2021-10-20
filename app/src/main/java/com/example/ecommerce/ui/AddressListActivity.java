@@ -1,6 +1,7 @@
 package com.example.ecommerce.ui;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerce.R;
 import com.example.ecommerce.adapter.AddressListAdapter;
 import com.example.ecommerce.utils.AppConstants;
+import com.example.ecommerce.utils.Prefs;
 import com.example.ecommerce.utils.TinyDB;
 import com.example.ecommerce.utils.Utils;
 
@@ -40,10 +42,23 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_list);
         ButterKnife.bind(this);
+        checkForRTL();
         init();
         setUp();
     }
 
+    private void checkForRTL(){
+        String language = Prefs.getString(AppConstants.LANGUAGE);
+        if(language.equals(AppConstants.LANGUAGE_ARABIC)){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+                getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            }
+        }else {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+                getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
+        }
+    }
     private void setUp() {
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(RecyclerView.VERTICAL);

@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ecommerce.ui.HomeFragment;
 import com.example.ecommerce.ui.ProfileFragment;
+import com.example.ecommerce.utils.AppConstants;
+import com.example.ecommerce.utils.Prefs;
 import com.example.ecommerce.utils.Utils;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
@@ -22,15 +24,22 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.chipNav)
     ChipNavigationBar chipNavigationBar;
 
-    boolean showFirst = true;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(Prefs.getBoolean(AppConstants.FIRST_TIME,true)){
+            askForNotificationPermission();
+            Prefs.putBoolean(AppConstants.FIRST_TIME,false);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        if (showFirst){
-            askForNotificationPermission();
-        }
+
         init();
 
         chipNavigationBar.setItemSelected(R.id.home,
@@ -84,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void askForNotificationPermission(){
-        showFirst = false;
+
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage("Allow Ecommerce App to send you push Notification");
 // Add the buttons
