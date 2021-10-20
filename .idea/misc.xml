@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/drawable/ic_baseline_add_location_24.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/drawable/ic_baseline_add_location_alt_24.xml" value="0.20260416666666667" />
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/drawable/ic_baseline_format_textdirection_r_to_l_24.xml" value="0.20260416666666667" />
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/drawable/ic_outline_close_24.xml" value="0.20260416666666667" />
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/drawable/ic_shopping_cart.xml" value="0.1" />
@@ -11,8 +12,10 @@
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/layout/activity_address_list.xml" value="0.22" />
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/layout/activity_main.xml" value="0.18645833333333334" />
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/layout/add_address.xml" value="0.22" />
+        <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/layout/address_list_item.xml" value="0.25" />
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/layout/address_listing.xml" value="0.11730072463768115" />
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/layout/fragment_profile.xml" value="0.18" />
+        <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/layout/item_empty_view.xml" value="0.11096014492753623" />
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/menu/bottom_menu.xml" value="0.18645833333333334" />
         <entry key="..\:/Users/subha/StudioProjects/Ecommerce/app/src/main/res/menu/top_menu.xml" value="0.18645833333333334" />
       </map>

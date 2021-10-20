@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="3dp"
+        android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent">
         <TextView
             android:layout_width="match_parent"
@@ -17,7 +18,7 @@
             android:layout_margin="5dp"
             android:text="@string/choose_your_location"
             android:gravity="center"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:padding="5dp"/>
         <RelativeLayout
@@ -44,6 +45,7 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 <Button
+    android:id="@+id/chooseLocation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintBottom_toBottomOf="parent"

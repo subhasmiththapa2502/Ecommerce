@@ -5,4 +5,7 @@ package com.example.ecommerce.utils;
  */
 public class AppConstants {
     public static String LANGUAGE = "language";
+    public static String RECENT_LOCATION = "recent_location";
+    public static String LOCATION_LIST = "location_list";
+
 }

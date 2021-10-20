@@ -7,6 +7,7 @@
     tools:context=".ui.AddressListActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -20,28 +21,37 @@
             android:background="@color/white"
             android:minHeight="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleTextColor="@android:color/white"/>
-
-        <Button
-            android:id="@+id/addAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="8dp"
-            android:background="@drawable/layout_bg"
-            android:text="@string/add_address"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+            app:titleTextColor="@android:color/white" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAddressList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/llAddress" />
 
     <FrameLayout
         android:id="@+id/your_placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:contentDescription="@string/add_address"
+        android:elevation="8dp"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_baseline_add_location_alt_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

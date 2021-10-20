@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.ContextWrapper;
 
 import com.example.ecommerce.utils.Prefs;
+import com.google.android.gms.maps.MapsInitializer;
 
 /**
  * Created by Subhasmith Thapa on 19,October,2021
@@ -13,6 +14,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         initSharedPreferences();
+        MapsInitializer.initialize(this);
     }
 
     public void initSharedPreferences(){

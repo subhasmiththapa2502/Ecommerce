@@ -15,6 +15,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,11 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.ecommerce.R;
+import com.example.ecommerce.utils.AppConstants;
+import com.example.ecommerce.utils.Prefs;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -37,8 +41,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Subhasmith Thapa on 20,October,2021
@@ -52,6 +56,27 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap gmap;
     private LatLng latLng;
     private LocationManager locationManager;
+    private String locationSelected;
+
+    OnLocationSelectedListener mCallback;
+
+    // Container Activity must implement this interface
+    public interface OnLocationSelectedListener {
+        void onLocationSelected(String location);
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the container context has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnLocationSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -74,6 +99,15 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
 
+        requireActivity().findViewById(R.id.chooseLocation).setOnClickListener(view1 -> {
+            Prefs.putString(AppConstants.RECENT_LOCATION, locationSelected);
+            //requireActivity().finish();
+
+
+            mCallback.onLocationSelected(locationSelected);
+            FragmentManager manager = requireActivity().getSupportFragmentManager();
+            manager.beginTransaction().remove(this).commit();
+        });
 
     }
 
@@ -284,12 +318,40 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
                 //Toast.makeText(requireActivity(), "mPosition is" + mPosition, Toast.LENGTH_SHORT).show();
 
+                double latitude = mPosition.latitude;
+                double longitude = mPosition.longitude;
+
+                locationSelected = getCompleteAddressString(latitude,longitude);
+//                Toast.makeText(requireActivity(), "mPosition is" + getCompleteAddressString(latitude,longitude), Toast.LENGTH_SHORT).show();
             }
         });
 
         //gmap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         //gmap.addMarker(new MarkerOptions().position(latLng).title("Seattle"));
 
+    }
+    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(requireActivity(), Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.w("My Current loction address", strReturnedAddress.toString());
+            } else {
+                Log.w("My Current loction address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("My Current loction address", "Canont get Address!");
+        }
+        return strAdd;
     }
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
