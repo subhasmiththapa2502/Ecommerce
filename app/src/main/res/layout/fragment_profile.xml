@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="10dp"
+            card_view:cardCornerRadius="4dp">
+
+            <TextView
+                android:id="@+id/toggle_rtl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:padding="10dp"
+                android:text="@string/toggle_rtl"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                card_view:drawableEndCompat="@drawable/ic_baseline_chevron_right_24"
+                card_view:drawableStartCompat="@drawable/ic_baseline_format_textdirection_r_to_l_24" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="10dp"
+            card_view:cardCornerRadius="4dp">
+
+            <TextView
+                android:id="@+id/enable_notificationAndLocation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:padding="10dp"
+                android:text="@string/enable_notification_and_location"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                card_view:drawableEndCompat="@drawable/ic_baseline_chevron_right_24"
+                card_view:drawableStartCompat="@drawable/ic_baseline_app_settings_alt_24" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="10dp"
+            card_view:cardCornerRadius="4dp">
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:padding="10dp"
+                android:text="@string/addresses"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                card_view:drawableEndCompat="@drawable/ic_baseline_chevron_right_24"
+                card_view:drawableStartCompat="@drawable/ic_baseline_add_location_24" />
+        </androidx.cardview.widget.CardView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>

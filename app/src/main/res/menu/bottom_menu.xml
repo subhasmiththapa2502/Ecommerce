@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home_outline"
+        android:title="Home"
+        app:cnb_radius="8dp"
+
+        android:tint="@color/white"
+        app:cnb_iconColor="@color/white"/>
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_outline_account"
+        android:title="Profile"
+        app:cnb_iconColor="@color/white"/>
+
+</menu>

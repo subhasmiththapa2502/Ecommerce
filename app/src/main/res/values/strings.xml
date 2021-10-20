@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Ecommerce</string>
+    <string name="toggle_rtl">Toggle RTL</string>
+    <string name="enable_notification_and_location">Enable Notification and Location</string>
+    <string name="addresses">Addresses</string>
+    <string name="add_address">Add Address</string>
+    <string name="title_location_permission">Permission</string>
+    <string name="text_location_permission">Please grant the location permission to use this feature</string>
+    <string name="ok">Ok</string>
+    <string name="choose_your_location">Choose your location</string>
 </resources>
