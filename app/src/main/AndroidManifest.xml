@@ -26,22 +26,19 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="www.chaitanyamunje.com"
-                    android:scheme="https" />
+                <!-- Accepts URIs that begin with "http://www.themoviedb.org” -->
+                <data android:scheme="https"
+                    android:host="www.themoviedb.org"
+                    android:pathPrefix="/movie" />
+                <!-- note that the leading "/" is required for pathPrefix-->
             </intent-filter>
-
-            <!--below is the same filter as above just the scheme is changed to http -->
-            <!--so we can open our app with the url starting with https and http as well-->
-            <intent-filter>
+            <intent-filter >
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="www.chaitanyamunje.com"
-                    android:scheme="http" />
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data android:scheme="themoviedb"
+                    android:host="movie" />
             </intent-filter>
         </activity>
         <activity

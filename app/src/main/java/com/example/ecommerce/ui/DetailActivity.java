@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,13 +22,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ecommerce.R;
+import com.example.ecommerce.api.MovieApi;
+import com.example.ecommerce.api.MovieService;
 import com.example.ecommerce.database.CartItem;
 import com.example.ecommerce.database.DatabaseClient;
+import com.example.ecommerce.model.LatestMovies;
+import com.example.ecommerce.model.NowPlaying;
+import com.example.ecommerce.model.Result;
 import com.example.ecommerce.utils.AppConstants;
 import com.example.ecommerce.utils.CircleAnimationUtil;
 import com.example.ecommerce.utils.Converter;
 import com.example.ecommerce.utils.GlideApp;
+import com.example.ecommerce.utils.PaginationScrollListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DetailActivity extends AppCompatActivity {
     ImageView movie_poster;
@@ -39,24 +52,46 @@ public class DetailActivity extends AppCompatActivity {
     TextView addToCart, addToCartDummy;
     ProgressBar movie_progress;
 
+    private MovieService movieService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_detail);
+        movieService = MovieApi.getClient(this).create(MovieService.class);
 
-        String title = getIntent().getStringExtra(AppConstants.TITLE);
-        String desc = getIntent().getStringExtra(AppConstants.DESC);
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        Uri data = intent.getData();
 
-        imagePath = getIntent().getStringExtra(AppConstants.IMAGE_PATH);
-        id = getIntent().getIntExtra(AppConstants.ID, 0);
-        cost = getIntent().getIntExtra(AppConstants.COST, 0);
-        init(title);
-        showImage(imagePath);
-        setMovie_title(title);
-        setMovie_Desc(desc);
+        if (data != null){
 
-        checkIfItemExistsInDb();
+            id = extractIdFromData(data);
+            callMovieDetailsApi();
+
+        }else{
+            String title = getIntent().getStringExtra(AppConstants.TITLE);
+            String desc = getIntent().getStringExtra(AppConstants.DESC);
+            imagePath = getIntent().getStringExtra(AppConstants.IMAGE_PATH);
+            id = getIntent().getIntExtra(AppConstants.ID, 0);
+            cost = getIntent().getIntExtra(AppConstants.COST, 0);
+            init(title);
+            checkIfItemExistsInDb();
+            showImage(imagePath);
+            setMovie_title(title);
+            setMovie_Desc(desc);
+        }
+
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    private  Integer extractIdFromData(Uri data){
+        return Integer.valueOf(data.toString().substring(data.toString().lastIndexOf("/")+1,data.toString().indexOf("-")));
     }
 
     public void showImage(String posterPath) {
@@ -266,5 +301,38 @@ public class DetailActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Performs a Retrofit call with movie id to get the movie details.
+     */
+    private Call<Result> callMovieDetails() {
+        return movieService.getMovieDetail(id,getString(R.string.my_api_key),
+                "en_us"
+        );
+    }
+
+    private void callMovieDetailsApi() {
+
+        callMovieDetails().enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                Result result = response.body();
+                init(result.getTitle());
+                checkIfItemExistsInDb();
+                setUI(result.getTitle(), result.getOverview(), result.getVoteCount(),result.getPosterPath());
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                t.printStackTrace();
+
+            }
+        });
+    }
+
+    private void setUI(String title, String description, int price, String imgPath){
+        setMovie_title(title);
+        setMovie_Desc(description);
+        showImage(AppConstants.BASE_URL_IMG_POSTER+imgPath);
+    }
 }
 

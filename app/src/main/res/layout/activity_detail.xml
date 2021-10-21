@@ -151,40 +151,43 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.core.widget.NestedScrollView>
-<TextView
-    android:background="@drawable/button_bg"
-    android:padding="10dp"
-    android:layout_margin="10dp"
-    android:gravity="center"
-    android:textColor="@color/white"
-    android:textAllCaps="true"
-    android:id="@+id/addToCart"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Add to cart"
-    android:backgroundTint="@color/black"
-    android:layout_gravity="bottom"/>
+
     <TextView
-        android:background="@drawable/button_bg"
-        android:padding="10dp"
+        android:id="@+id/addToCart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_margin="10dp"
+        android:background="@drawable/button_bg"
+        android:backgroundTint="@color/black"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:padding="10dp"
+        android:text="Add to cart"
         android:textAllCaps="true"
+        android:textColor="@color/white" />
+
+    <TextView
         android:id="@+id/addToCartDummy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add to cart"
-        android:visibility="gone"
+        android:layout_gravity="bottom"
+        android:layout_margin="10dp"
+        android:background="@drawable/button_bg"
         android:backgroundTint="@color/black"
-        android:layout_gravity="bottom"/>
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Add to cart"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
     <ProgressBar
         android:id="@+id/movie_progress"
         style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
-        android:visibility="gone"
-        android:theme="@style/CircularProgressBar"/>
+        android:theme="@style/CircularProgressBar"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
