@@ -2,17 +2,26 @@ package com.example.ecommerce;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.ecommerce.adapter.PaginationAdapter;
+import com.example.ecommerce.ui.CartActivity;
+import com.example.ecommerce.ui.ErrorFragment;
 import com.example.ecommerce.ui.HomeFragment;
 import com.example.ecommerce.ui.ProfileFragment;
 import com.example.ecommerce.utils.AppConstants;
+import com.example.ecommerce.utils.Converter;
+import com.example.ecommerce.utils.NetworkUtil;
+import com.example.ecommerce.utils.PaginationAdapterCallback;
 import com.example.ecommerce.utils.Prefs;
 import com.example.ecommerce.utils.Utils;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
@@ -20,10 +29,11 @@ import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PaginationAdapterCallback {
     @BindView(R.id.chipNav)
     ChipNavigationBar chipNavigationBar;
 
+    int cart_count = 2;
 
     @Override
     protected void onResume() {
@@ -44,9 +54,15 @@ public class MainActivity extends AppCompatActivity {
 
         chipNavigationBar.setItemSelected(R.id.home,
                 true);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.your_placeholder,
-                        new HomeFragment()).commit();
+        if (NetworkUtil.hasNetwork(this)){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.your_placeholder,
+                            new HomeFragment()).commit();
+        }else {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.your_placeholder,
+                            new ErrorFragment()).commit();
+        }
         bottomMenu();
         /*// Begin the transaction
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -71,9 +87,18 @@ public class MainActivity extends AppCompatActivity {
                                 fragment = new ProfileFragment();
                                 break;
                         }
-                        getSupportFragmentManager().beginTransaction()
+                        if (NetworkUtil.hasNetwork(MainActivity.this)){
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.your_placeholder,
+                                            fragment).commit();
+                        }else {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.your_placeholder,
+                                            new ErrorFragment()).commit();
+                        }
+                        /*getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.your_placeholder,
-                                        fragment).commit();
+                                        fragment).commit();*/
                     }
                 });
     }
@@ -89,6 +114,25 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.top_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.cart);
+        menuItem.setIcon(Converter.convertLayoutToImage(MainActivity.this, cart_count, R.drawable.ic_shopping_cart));
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        switch (item.getItemId()) {
+            case R.id.cart:
+                Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+                startActivity(intent);
+                break;
+
+
+        }
         return true;
     }
 
@@ -114,5 +158,10 @@ public class MainActivity extends AppCompatActivity {
 // Create the AlertDialog
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    public void retryPageLoad() {
+
     }
 }

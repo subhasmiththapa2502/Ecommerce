@@ -9,4 +9,35 @@
     <string name="ok">Ok</string>
     <string name="choose_your_location">Choose your location</string>
     <string name="cancel">cancel</string>
+    <string name="my_api_key">ec01f8c2eb6ac402f2ca026dc2d9b8fd</string>
+    <string name="error_msg">Sorry! Couldn\'t fetch movies.</string>
+    <string name="btn_retry">Retry</string>
+    <string name="error_msg_no_internet">Not connected to internet</string>
+    <string name="error_msg_timeout">The server took too long to respond</string>
+    <string name="error_msg_unknown">An unexpected error occurred</string>
+    <string name="tap_to_reload">Tap to reload</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="go_to_cart">GO TO CART</string>
+    <string-array name="quantity_string_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string name="your_order_is_complete">Your Order is Complete</string>
+    <string name="bottom_sheet_option_gallery">Upload from Gallery</string>
+    <string name="bottom_sheet_option_heading">Add Photo</string>
+    <string name="bottom_sheet_option_remove_photo">Remove Photo</string>
+    <string name="continue_to_checkout">continue to checkout</string>
+    <string name="total">Total</string>
+    <string name="free">FREE</string>
+    <string name="delivery">Delivery</string>
+    <string name="order_value">Order Value</string>
+    <string name="estimated_delivery_time_3_7_days">Estimated delivery time 3-7 days</string>
+    <string name="my_cart">My Cart</string>
+    <string name="explore_more">Explore More</string>
+    <string name="confetti">confetti</string>
 </resources>

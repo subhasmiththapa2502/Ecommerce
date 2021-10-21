@@ -9,4 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="home">#3F51B5</color>
     <color name="profile">#4CAF50</color>
+    <color name="maroon">#800000</color>
+    <color name="placeholder_grey">#AAADC4</color>
+    <color name="placeholder_grey_20">#33AAADC4</color>
+    <color name="colorPrimary">#5F4BB6</color>
+    <color name="colorPrimaryDark">#433582</color>
+    <color name="colorAccent">#26F0F1</color>
+    <color name="background">#EFEFEF</color>
+
 </resources>
