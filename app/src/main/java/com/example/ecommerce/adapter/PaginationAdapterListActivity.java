@@ -340,12 +340,14 @@ public class PaginationAdapterListActivity extends RecyclerView.Adapter<Recycler
         private ProgressBar mProgress;
         private LinearLayoutCompat llItem;
         private LinearLayout llCart;
+        private LinearLayout llListItem;
 
 
         public MovieVH(View itemView) {
             super(itemView);
 
             llItem = itemView.findViewById(R.id.llItem);
+            llListItem = itemView.findViewById(R.id.llListItem);
             llCart = itemView.findViewById(R.id.llCart);
             mMovieTitle = itemView.findViewById(R.id.movie_title);
             mMovieDesc = itemView.findViewById(R.id.movie_desc);
@@ -355,7 +357,7 @@ public class PaginationAdapterListActivity extends RecyclerView.Adapter<Recycler
             mPosterImg = itemView.findViewById(R.id.movie_poster);
             mProgress = itemView.findViewById(R.id.movie_progress);
             addToCart = itemView.findViewById(R.id.addToCart);
-            llItem.setOnClickListener(this);
+            itemView.setOnClickListener(this);
             addToCart.setOnClickListener(this);
         }
 
@@ -366,7 +368,7 @@ public class PaginationAdapterListActivity extends RecyclerView.Adapter<Recycler
                     addToCart.setVisibility(View.GONE);
                     llCart.setVisibility(View.VISIBLE);
                     break;
-                case R.id.llItem:
+                case R.id.llListItem:
                     Intent intent = new Intent(context, DetailActivity.class);
 // Pass data object in the bundle and populate details activity.
                     intent.putExtra(AppConstants.IMAGE_PATH, AppConstants.BASE_URL_IMG_POSTER+movieResults

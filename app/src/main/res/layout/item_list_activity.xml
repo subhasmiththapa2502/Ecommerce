@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/llListItem"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -43,10 +44,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="20dp"
-                    android:text="Add"
-                    android:visibility="gone"
                     android:background="@drawable/button_bg"
-                     />
+                    android:text="Add"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/llCart"
@@ -59,8 +59,8 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingTop="5dp"
-                    android:visibility="gone"
-                    android:paddingBottom="5dp">
+                    android:paddingBottom="5dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="20dp"
@@ -99,8 +99,9 @@
                 android:id="@+id/llItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_toEndOf="@id/rlIV">
+                android:layout_toEndOf="@id/rlIV"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/movie_title"
                     android:layout_width="wrap_content"
