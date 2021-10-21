@@ -33,6 +33,7 @@ import com.example.ecommerce.adapter.PaginationAdapterNowPlaying;
 import com.example.ecommerce.adapter.SliderAdapter;
 import com.example.ecommerce.api.MovieApi;
 import com.example.ecommerce.api.MovieService;
+import com.example.ecommerce.model.LatestMovies;
 import com.example.ecommerce.model.NowPlaying;
 import com.example.ecommerce.model.Result;
 import com.example.ecommerce.model.TopRatedMovies;
@@ -69,7 +70,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     TextView latestMoviesSeeAll;
 
     // limiting to 10 for this demo, since total pages in actual API is very large. Feel free to modify.
-    private static final int TOTAL_PAGES = 10;
+    private static final int TOTAL_PAGES = 200;
 
     private static final int PAGE_START = 1;
     private boolean isLoading = false;
@@ -78,13 +79,13 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
 
     //FOR NOW PLAYING
-    private static final int PAGE_START_NOW_PLAYING = 1;
+    private static final int PAGE_START_NOW_PLAYING = 20;
     private int currentPageNowPlaying = PAGE_START_NOW_PLAYING;
     private boolean isLoadingNowPlaying = false;
     private boolean isLastPageNowPlaying = false;
 
     //FOR LATEST
-    private static final int PAGE_START_LATEST = 1;
+    private static final int PAGE_START_LATEST = 100;
     private int currentPageLatest = PAGE_START_LATEST;
     private boolean isLoadingLatest = false;
     private boolean isLastPageLatest = false;
@@ -344,11 +345,11 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     private void callLatestApi() {
         currentPageLatest = PAGE_START_LATEST;
 
-        callLatest().enqueue(new Callback<TopRatedMovies>() {
+        callLatest().enqueue(new Callback<LatestMovies>() {
             @Override
-            public void onResponse(Call<TopRatedMovies> call, Response<TopRatedMovies> response) {
+            public void onResponse(Call<LatestMovies> call, Response<LatestMovies> response) {
                 hideErrorView();
-                List<Result> results = fetchResults(response);
+                List<Result> results = fetchResultsLatest(response);
                 progressBar.setVisibility(View.GONE);
                 adapterLatest.addAll(results);
 
@@ -357,7 +358,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             }
 
             @Override
-            public void onFailure(Call<TopRatedMovies> call, Throwable t) {
+            public void onFailure(Call<LatestMovies> call, Throwable t) {
                 t.printStackTrace();
                 showErrorView(t);
             }
@@ -441,7 +442,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     private Call<NowPlaying> callNowPlayingMoviesApi() {
         return movieService.getNowPlaying(getString(R.string.my_api_key),
                 "en_us",
-                currentPage
+                currentPageNowPlaying
         );
     }
 
@@ -451,10 +452,10 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
      * As {@link #currentPage} will be incremented automatically
      * by @{@link PaginationScrollListener} to load next page.
      */
-    private Call<TopRatedMovies> callLatest() {
+    private Call<LatestMovies> callLatest() {
         return movieService.getLatest(getString(R.string.my_api_key),
                 "en_us",
-                currentPage
+                currentPageLatest
         );
     }
 
@@ -539,13 +540,13 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
     private void loadNextPageLatest() {
         Log.d(TAG, "loadNextPage: " + currentPageLatest);
-        callLatest().enqueue(new Callback<TopRatedMovies>() {
+        callLatest().enqueue(new Callback<LatestMovies>() {
             @Override
-            public void onResponse(Call<TopRatedMovies> call, Response<TopRatedMovies> response) {
+            public void onResponse(Call<LatestMovies> call, Response<LatestMovies> response) {
                 adapterLatest.removeLoadingFooter();
                 isLoadingLatest = false;
 
-                List<Result> results = fetchResults(response);
+                List<Result> results = fetchResultsLatest(response);
                 adapterLatest.addAll(results);
 
                 if (currentPageLatest != TOTAL_PAGES) adapterLatest.addLoadingFooter();
@@ -553,7 +554,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             }
 
             @Override
-            public void onFailure(Call<TopRatedMovies> call, Throwable t) {
+            public void onFailure(Call<LatestMovies> call, Throwable t) {
                 t.printStackTrace();
                 adapter.showRetry(true, fetchErrorMessage(t));
             }
@@ -593,6 +594,15 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
      */
     private List<Result> fetchResults(Response<TopRatedMovies> response) {
         TopRatedMovies topRatedMovies = response.body();
+        return topRatedMovies.getResults();
+    }
+
+    /**
+     * @param response extracts List<{@link Result>} from response
+     * @return
+     */
+    private List<Result> fetchResultsLatest(Response<LatestMovies> response) {
+        LatestMovies topRatedMovies = response.body();
         return topRatedMovies.getResults();
     }
 

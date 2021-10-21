@@ -3,6 +3,7 @@ package com.example.ecommerce.api;
 
 
 
+import com.example.ecommerce.model.LatestMovies;
 import com.example.ecommerce.model.NowPlaying;
 import com.example.ecommerce.model.TopRatedMovies;
 
@@ -31,8 +32,8 @@ public interface MovieService {
             @Query("page") int pageIndex
     );
 
-    @GET("movie/latest")
-    Call<TopRatedMovies> getLatest(
+    @GET("movie/top_rated")
+    Call<LatestMovies> getLatest(
             @Query("api_key") String apiKey,
             @Query("language") String language,
             @Query("page") int pageIndex
