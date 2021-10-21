@@ -32,7 +32,7 @@ public interface MovieService {
             @Query("page") int pageIndex
     );
 
-    @GET("movie/top_rated")
+    @GET("movie/latest")
     Call<LatestMovies> getLatest(
             @Query("api_key") String apiKey,
             @Query("language") String language,
