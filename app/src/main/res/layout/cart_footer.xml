@@ -92,6 +92,6 @@
         android:layout_width="match_parent"
         android:backgroundTint="@color/black"
         android:text="continue to checkout"
-        android:padding="12dp"
+        android:layout_margin="10dp"
         android:layout_height="wrap_content"/>
 </androidx.appcompat.widget.LinearLayoutCompat>
