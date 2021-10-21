@@ -1,5 +1,6 @@
 package com.example.ecommerce.ui;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.ecommerce.MainActivity;
 import com.example.ecommerce.R;
 import com.example.ecommerce.database.DatabaseClient;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -78,7 +80,8 @@ public class OrderConfirmationFragment extends BottomSheetDialogFragment {
             @Override
             protected void onPostExecute(Void unused) {
                 super.onPostExecute(unused);
-                requireActivity().finish();
+                //requireActivity().finish();
+                openMainPage();
 
             }
         }
@@ -87,4 +90,13 @@ public class OrderConfirmationFragment extends BottomSheetDialogFragment {
         gt.execute();
     }
 
+    private void openMainPage(){
+        Intent i = new Intent(requireActivity(), MainActivity.class);        // Specify any activity here e.g. home or splash or login etc
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra("EXIT", true);
+        startActivity(i);
+        requireActivity().finish();
+    }
 }

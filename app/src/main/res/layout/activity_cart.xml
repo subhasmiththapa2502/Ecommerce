@@ -26,12 +26,16 @@
             android:textSize="@dimen/toolbar_title"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
-
+<RelativeLayout
+    android:visibility="gone"
+    android:id="@+id/ifDataPresent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/toolbar">
     <TextView
         android:id="@+id/tvDec"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
         android:gravity="center"
         android:text="@string/estimated_delivery_time_3_7_days"
         android:textSize="@dimen/secondary_text" />
@@ -63,5 +67,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
+        />
+</RelativeLayout>
+  <RelativeLayout
+      android:id="@+id/rlEmpty"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:gravity="center|center_horizontal|center_vertical"
+      android:layout_margin="20dp"
+      android:foregroundGravity="center"
+      android:layout_below="@+id/toolbar">
+
+      <ImageView
+          android:id="@+id/cart_empty_icon"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:foregroundGravity="center"
+          android:src="@drawable/empty_cart"/>
+
+      <TextView
+          android:id="@+id/tvTitle"
+          android:layout_margin="10dp"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/cart_empty_icon"
+          android:text="Your cart is empty"
+          android:gravity="center"
+          android:textSize="24sp"
+          android:textStyle="bold"/>
+
+      <TextView
+          android:id="@+id/tvDesc"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/tvTitle"
+          android:layout_margin="10dp"
+          android:text="Looks like you haven't added anything to your cart"
+          android:gravity="center"
+          android:textSize="12sp"
+          android:textStyle="bold"/>
+
+      <Button
+          android:id="@+id/explore"
+          android:layout_width="match_parent"
+          android:backgroundTint="@color/black"
+          android:text="@string/explore"
+          android:layout_margin="10dp"
+          android:layout_below="@+id/tvDesc"
+          android:layout_height="wrap_content"/>
+  </RelativeLayout>
 </RelativeLayout>

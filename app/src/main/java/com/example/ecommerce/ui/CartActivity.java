@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,9 +29,10 @@ import java.util.Objects;
 
 public class CartActivity extends AppCompatActivity implements CartAdapterWithFooter.CartInterface, PaginationAdapterCallback, CartAdapterWithFooter.FooterClickListener {
     private RecyclerView recyclerView;
-    //CartAdapter adapter;
     CartAdapterWithFooter adapter;
     private ProgressBar movie_progress;
+    RelativeLayout rlEmpty,rlIfDataPresent;
+    Button explore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,9 @@ public class CartActivity extends AppCompatActivity implements CartAdapterWithFo
 
         recyclerView = findViewById(R.id.rvCart);
         movie_progress = findViewById(R.id.movie_progress);
+        rlEmpty = findViewById(R.id.rlEmpty);
+        rlIfDataPresent = findViewById(R.id.ifDataPresent);
+        explore = findViewById(R.id.explore);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         init();
@@ -49,6 +55,8 @@ public class CartActivity extends AppCompatActivity implements CartAdapterWithFo
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Cart");
         Utils.changeStatusBarColour(this);
+
+        explore.setOnClickListener(view -> finish());
     }
 
     private void updateTask(final CartItem item, int quantity) {
@@ -151,6 +159,13 @@ public class CartActivity extends AppCompatActivity implements CartAdapterWithFo
 
             @Override
             protected void onPostExecute(List<CartItem> tasks) {
+                if (tasks.isEmpty()){
+                    rlIfDataPresent.setVisibility(View.GONE);
+                    rlEmpty.setVisibility(View.VISIBLE);
+                }else{
+                    rlIfDataPresent.setVisibility(View.VISIBLE);
+                    rlEmpty.setVisibility(View.GONE);
+                }
                 super.onPostExecute(tasks);
                 movie_progress.setVisibility(View.GONE);
                 adapter = new CartAdapterWithFooter(CartActivity.this);
