@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="70dp"
     android:layout_marginTop="56dp"
+    android:layout_marginBottom="70dp"
     tools:context=".MainActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/main_swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:scrollbars="none">
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -24,62 +25,77 @@
                 <!-- viewpager to show images -->
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp">
+
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/viewPagerMain"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"/>
+                        android:layout_height="150dp" />
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/viewpager_bg"
                         android:gravity="bottom"
-                        tools:text="Demo Name"
-                        android:textColor="@android:color/white"
-                        android:text="Trending Now"
                         android:paddingBottom="10dp"
-                        android:textStyle="bold"
+                        android:paddingStart="10dp"
+                        android:text="Trending Now"
+                        android:textColor="@android:color/white"
                         android:textSize="16sp"
-                        android:background="@drawable/viewpager_bg"/>
+                        android:textStyle="bold"
+                        tools:text="Demo Name" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
                         android:text="Upcoming"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/mostPopularSeeAll"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
                         android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
                         android:gravity="end|center"
                         android:text="See All"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/main_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:clipToPadding="false"
                     android:paddingTop="5dp"
-                    android:paddingBottom="@dimen/activity_margin_content"
-                    />
+                    android:paddingBottom="@dimen/activity_margin_content" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp">
+
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
                         android:text="Now Playing"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/nowPlayingSeeAll"
@@ -91,23 +107,30 @@
                         android:text="See All"
                         android:textStyle="bold" />
 
-                </RelativeLayout>                <androidx.recyclerview.widget.RecyclerView
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/main_recycler_now_playing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:paddingTop="5dp"
-                    android:paddingBottom="@dimen/activity_margin_content"
-                    />
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:paddingBottom="@dimen/activity_margin_content" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp">
+
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
                         android:text="Latest Movies"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/latestMoviesSeeAll"
@@ -120,17 +143,18 @@
                         android:textStyle="bold" />
 
                 </RelativeLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/main_recycler_latest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:paddingTop="5dp"
-                    android:paddingBottom="@dimen/activity_margin_content"
-                    />
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:paddingBottom="@dimen/activity_margin_content" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.core.widget.NestedScrollView>
-
 
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -139,8 +163,8 @@
         android:id="@+id/main_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
-    <include layout="@layout/error_layout"/>
+    <include layout="@layout/error_layout" />
 
 </FrameLayout>
