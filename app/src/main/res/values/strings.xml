@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ecommerce</string>
+    <string name="app_name">Infinity Movies</string>
     <string name="toggle_rtl">Toggle RTL</string>
     <string name="enable_notification_and_location">Enable Notification and Location</string>
     <string name="addresses">Addresses</string>
