@@ -97,7 +97,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapterWithFo
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 movie_progress.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_LONG).show();
 
                 finish();
                 overridePendingTransition( 0, 0);
