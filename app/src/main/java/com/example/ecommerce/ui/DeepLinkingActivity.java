@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.animation.Animator;
@@ -21,23 +20,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.api.MovieApi;
 import com.example.ecommerce.api.MovieService;
 import com.example.ecommerce.database.CartItem;
 import com.example.ecommerce.database.DatabaseClient;
-import com.example.ecommerce.model.LatestMovies;
-import com.example.ecommerce.model.NowPlaying;
 import com.example.ecommerce.model.Result;
 import com.example.ecommerce.utils.AppConstants;
 import com.example.ecommerce.utils.CircleAnimationUtil;
 import com.example.ecommerce.utils.Converter;
 import com.example.ecommerce.utils.GlideApp;
-import com.example.ecommerce.utils.PaginationScrollListener;
 import com.example.ecommerce.utils.Utils;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -48,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetailActivity extends AppCompatActivity {
+public class DeepLinkingActivity extends AppCompatActivity {
     ImageView movie_poster;
     TextView movie_title, movie_desc;
     int id;
@@ -60,11 +54,12 @@ public class DetailActivity extends AppCompatActivity {
     MenuItem menuItem;
 
     private MovieService movieService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_deep_linking);
 
-        setContentView(R.layout.activity_detail);
         movieService = MovieApi.getClient(this).create(MovieService.class);
 
         Intent intent = getIntent();
@@ -97,14 +92,6 @@ public class DetailActivity extends AppCompatActivity {
         Utils.checkForRTL(this);
 
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        getCartCount();
-        checkIfItemExistsInDb();
-    }
-
     private  Integer extractIdFromData(Uri data){
         return Integer.valueOf(data.toString().substring(data.toString().lastIndexOf("/")+1,data.toString().indexOf("-")));
     }
@@ -131,7 +118,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onAnimationEnd(Animator animation) {
 
                 cart_count = cart_count+1;
-                menuItem.setIcon(Converter.convertLayoutToImage(DetailActivity.this, cart_count, R.drawable.ic_shopping_cart));
+                menuItem.setIcon(Converter.convertLayoutToImage(DeepLinkingActivity.this, cart_count, R.drawable.ic_shopping_cart));
             }
 
             @Override
@@ -276,7 +263,7 @@ public class DetailActivity extends AppCompatActivity {
                     task.setImagePath(imagePath);
 
                     //adding to database
-                    DatabaseClient.getInstance(DetailActivity.this).getCartItemDataBase()
+                    DatabaseClient.getInstance(DeepLinkingActivity.this).getCartItemDataBase()
                             .cartItemDao()
                             .insertCartItem(task);
                 }
@@ -301,7 +288,7 @@ public class DetailActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.top_menu, menu);
         menuItem = menu.findItem(R.id.cart);
-        menuItem.setIcon(Converter.convertLayoutToImage(DetailActivity.this, cart_count, R.drawable.ic_shopping_cart));
+        menuItem.setIcon(Converter.convertLayoutToImage(DeepLinkingActivity.this, cart_count, R.drawable.ic_shopping_cart));
 
         return true;
     }
@@ -386,7 +373,7 @@ public class DetailActivity extends AppCompatActivity {
                     cart_count = tasks.size();
                 }
                 if (menuItem != null){
-                    menuItem.setIcon(Converter.convertLayoutToImage(DetailActivity.this, cart_count, R.drawable.ic_shopping_cart));
+                    menuItem.setIcon(Converter.convertLayoutToImage(DeepLinkingActivity.this, cart_count, R.drawable.ic_shopping_cart));
                 }
                 super.onPostExecute(tasks);
             }
@@ -427,4 +414,3 @@ public class DetailActivity extends AppCompatActivity {
         return cm.getActiveNetworkInfo() != null;
     }
 }
-
