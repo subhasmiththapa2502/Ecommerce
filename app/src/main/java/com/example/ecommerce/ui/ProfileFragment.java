@@ -34,7 +34,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
-        return inflater.inflate(R.layout.fragment_profile, parent, false);
+        return inflater.inflate(R.layout.profile_fragment_new, parent, false);
     }
 
     // This event is triggered soon after onCreateView().
@@ -55,7 +55,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         card_view3 = requireActivity().findViewById(R.id.card_view3);
         card_view3.setOnClickListener(view -> openAddressListingPage());
 
-        llProfile = requireActivity().findViewById(R.id.llProfile);
+        //llProfile = requireActivity().findViewById(R.id.llProfile);
 
     }
 
