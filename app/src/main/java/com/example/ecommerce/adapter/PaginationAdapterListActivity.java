@@ -371,6 +371,7 @@ public class PaginationAdapterListActivity extends RecyclerView.Adapter<Recycler
                 case R.id.llListItem:
                     Intent intent = new Intent(context, DetailActivity.class);
 // Pass data object in the bundle and populate details activity.
+                    intent.putExtra(AppConstants.ID,movieResults.get(getPosition()).getId());
                     intent.putExtra(AppConstants.IMAGE_PATH, AppConstants.BASE_URL_IMG_POSTER+movieResults
                             .get(getPosition()).getBackdropPath());
                     intent.putExtra(AppConstants.TITLE, movieResults

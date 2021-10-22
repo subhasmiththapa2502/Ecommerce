@@ -3,6 +3,7 @@ package com.example.ecommerce;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.ecommerce.adapter.PaginationAdapter;
+import com.example.ecommerce.database.CartItem;
+import com.example.ecommerce.database.DatabaseClient;
 import com.example.ecommerce.ui.CartActivity;
 import com.example.ecommerce.ui.ErrorFragment;
 import com.example.ecommerce.ui.HomeFragment;
@@ -25,6 +26,8 @@ import com.example.ecommerce.utils.PaginationAdapterCallback;
 import com.example.ecommerce.utils.Prefs;
 import com.example.ecommerce.utils.Utils;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
         ButterKnife.bind(this);
 
         init();
-
+        getCartCount();
         chipNavigationBar.setItemSelected(R.id.home,
                 true);
         if (NetworkUtil.hasNetwork(this)){
@@ -119,7 +122,39 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
 
         return true;
     }
+    private void getCartCount() {
+        class GetTasks extends AsyncTask<Void, Void, List<CartItem>> {
 
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected List<CartItem> doInBackground(Void... voids) {
+
+                List<CartItem> taskList = DatabaseClient
+                        .getInstance(getApplicationContext())
+                        .getCartItemDataBase()
+                        .cartItemDao()
+                        .getCartItems();
+                return taskList;
+            }
+
+            @Override
+            protected void onPostExecute(List<CartItem> tasks) {
+                if (tasks.isEmpty()){
+                    cart_count = 0;
+                }else{
+                    cart_count = tasks.size();
+                }
+                super.onPostExecute(tasks);
+            }
+        }
+
+        GetTasks gt = new GetTasks();
+        gt.execute();
+    }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 //        return super.onOptionsItemSelected(item);

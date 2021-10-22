@@ -47,10 +47,11 @@ public class DetailActivity extends AppCompatActivity {
     TextView movie_title, movie_desc;
     int id;
     int cost;
-    int cart_count = 2;
+    int cart_count = 0;
     String imagePath;
     TextView addToCart, addToCartDummy;
     ProgressBar movie_progress;
+    MenuItem menuItem;
 
     private MovieService movieService;
     @Override
@@ -90,6 +91,13 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getCartCount();
+        checkIfItemExistsInDb();
+    }
+
     private  Integer extractIdFromData(Uri data){
         return Integer.valueOf(data.toString().substring(data.toString().lastIndexOf("/")+1,data.toString().indexOf("-")));
     }
@@ -115,6 +123,8 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
 
+                cart_count = cart_count+1;
+                menuItem.setIcon(Converter.convertLayoutToImage(DetailActivity.this, cart_count, R.drawable.ic_shopping_cart));
             }
 
             @Override
@@ -160,7 +170,7 @@ public class DetailActivity extends AppCompatActivity {
         addToCartDummy = findViewById(R.id.addToCartDummy);
         addToCartDummy.setVisibility(View.GONE);
         addToCart.setOnClickListener(view -> {
-            if (addToCart.getText().equals("Add to cart")) {
+            if (addToCart.getText().toString().equalsIgnoreCase("Add to cart")) {
                 Handler handler = new Handler();
                 addToCartDummy.setVisibility(View.VISIBLE);
                 movie_progress.setVisibility(View.VISIBLE);
@@ -193,6 +203,11 @@ public class DetailActivity extends AppCompatActivity {
 
     private void checkIfItemExistsInDb() {
         class CheckTask extends AsyncTask<Boolean, Void, Boolean> {
+            @Override
+            protected void onPreExecute() {
+                movie_progress.setVisibility(View.VISIBLE);
+                super.onPreExecute();
+            }
 
             @Override
             protected Boolean doInBackground(Boolean... voids) {
@@ -207,9 +222,12 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Boolean exists) {
+                movie_progress.setVisibility(View.GONE);
                 super.onPostExecute(exists);
                 if (exists) {
                     addToCart.setText(R.string.go_to_cart);
+                }else {
+                    addToCart.setText(R.string.add_to_cart);
                 }
 
                 //startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -260,14 +278,6 @@ public class DetailActivity extends AppCompatActivity {
                 super.onPostExecute(exists);
                 addToCart.setText(R.string.go_to_cart);
 
-                if (exists) {
-                    //Toast.makeText(getApplicationContext(), "Already Exists", Toast.LENGTH_LONG).show();
-                } else {
-                    //Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
-                }
-
-                //startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
             }
         }
 
@@ -279,7 +289,7 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.top_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.cart);
+        menuItem = menu.findItem(R.id.cart);
         menuItem.setIcon(Converter.convertLayoutToImage(DetailActivity.this, cart_count, R.drawable.ic_shopping_cart));
 
         return true;
@@ -335,6 +345,43 @@ public class DetailActivity extends AppCompatActivity {
         setMovie_title(title);
         setMovie_Desc(description);
         showImage(AppConstants.BASE_URL_IMG_POSTER+imgPath);
+    }
+
+    private void getCartCount() {
+        class GetTasks extends AsyncTask<Void, Void, List<CartItem>> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected List<CartItem> doInBackground(Void... voids) {
+
+                List<CartItem> taskList = DatabaseClient
+                        .getInstance(getApplicationContext())
+                        .getCartItemDataBase()
+                        .cartItemDao()
+                        .getCartItems();
+                return taskList;
+            }
+
+            @Override
+            protected void onPostExecute(List<CartItem> tasks) {
+                if (tasks.isEmpty()){
+                    cart_count = 0;
+                }else{
+                    cart_count = tasks.size();
+                }
+                if (menuItem != null){
+                    menuItem.setIcon(Converter.convertLayoutToImage(DetailActivity.this, cart_count, R.drawable.ic_shopping_cart));
+                }
+                super.onPostExecute(tasks);
+            }
+        }
+
+        GetTasks gt = new GetTasks();
+        gt.execute();
     }
 }
 

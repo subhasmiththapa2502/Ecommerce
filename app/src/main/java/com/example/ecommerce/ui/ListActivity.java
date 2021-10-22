@@ -9,6 +9,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +25,8 @@ import com.example.ecommerce.R;
 import com.example.ecommerce.adapter.PaginationAdapterListActivity;
 import com.example.ecommerce.api.MovieApi;
 import com.example.ecommerce.api.MovieService;
+import com.example.ecommerce.database.CartItem;
+import com.example.ecommerce.database.DatabaseClient;
 import com.example.ecommerce.model.Result;
 import com.example.ecommerce.model.TopRatedMovies;
 import com.example.ecommerce.utils.Converter;
@@ -58,8 +61,8 @@ public class ListActivity extends AppCompatActivity implements PaginationAdapter
 
     TextView txtError;
     PaginationAdapterListActivity paginationAdapterListActivity;
-    private int cart_count=2;
-
+    private int cart_count=0;
+    MenuItem menuItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -271,12 +274,52 @@ public class ListActivity extends AppCompatActivity implements PaginationAdapter
     public void retryPageLoad() {
 
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getCartCount();
+    }
+    private void getCartCount() {
+        class GetTasks extends AsyncTask<Void, Void, List<CartItem>> {
 
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected List<CartItem> doInBackground(Void... voids) {
+
+                List<CartItem> taskList = DatabaseClient
+                        .getInstance(getApplicationContext())
+                        .getCartItemDataBase()
+                        .cartItemDao()
+                        .getCartItems();
+                return taskList;
+            }
+
+            @Override
+            protected void onPostExecute(List<CartItem> tasks) {
+                if (tasks.isEmpty()){
+                    cart_count = 0;
+                }else{
+                    cart_count = tasks.size();
+                }
+                if (menuItem!= null){
+                    menuItem.setIcon(Converter.convertLayoutToImage(ListActivity.this, cart_count, R.drawable.ic_shopping_cart));
+                }
+                super.onPostExecute(tasks);
+            }
+        }
+
+        GetTasks gt = new GetTasks();
+        gt.execute();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.top_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.cart);
+        menuItem = menu.findItem(R.id.cart);
         menuItem.setIcon(Converter.convertLayoutToImage(ListActivity.this, cart_count, R.drawable.ic_shopping_cart));
 
         return true;
