@@ -56,7 +56,9 @@ public class CartActivity extends AppCompatActivity implements CartAdapterWithFo
         Objects.requireNonNull(getSupportActionBar()).setTitle("Cart");
         Utils.changeStatusBarColour(this);
 
-        explore.setOnClickListener(view -> finish());
+        explore.setOnClickListener(view -> {
+            Utils.openMainPage(this);
+        });
     }
 
     private void updateTask(final CartItem item, int quantity) {

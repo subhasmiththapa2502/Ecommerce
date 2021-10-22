@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import com.example.ecommerce.MainActivity;
 import com.example.ecommerce.R;
 import com.example.ecommerce.database.DatabaseClient;
+import com.example.ecommerce.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 /**
@@ -91,6 +92,8 @@ public class OrderConfirmationFragment extends BottomSheetDialogFragment {
     }
 
     private void openMainPage(){
+        Utils.openMainPage(requireActivity());
+/*
         Intent i = new Intent(requireActivity(), MainActivity.class);        // Specify any activity here e.g. home or splash or login etc
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -98,5 +101,6 @@ public class OrderConfirmationFragment extends BottomSheetDialogFragment {
         i.putExtra("EXIT", true);
         startActivity(i);
         requireActivity().finish();
+*/
     }
 }

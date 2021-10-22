@@ -2,6 +2,8 @@ package com.example.ecommerce.utils;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.FrameLayout;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.ecommerce.MainActivity;
 import com.example.ecommerce.R;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -46,6 +49,15 @@ public class Utils {
         }
     }
 
+    public static void openMainPage(Activity activity){
+        Intent i = new Intent(activity, MainActivity.class);        // Specify any activity here e.g. home or splash or login etc
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra("EXIT", true);
+        activity.startActivity(i);
+        activity.finish();
+    }
     public static void showSnackBar(View viewProvided, String errorMessage){
         Snackbar snack = Snackbar.make(viewProvided, errorMessage, Snackbar.LENGTH_LONG);
         View view = snack.getView();
