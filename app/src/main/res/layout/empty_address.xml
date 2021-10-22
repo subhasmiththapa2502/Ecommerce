@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:foregroundGravity="center"
+        android:layout_below="@+id/toolbar">
+
+        <ImageView
+            android:id="@+id/cart_empty_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="center"
+            android:src="@drawable/address_icon" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cart_empty_icon"
+            android:text="Your Address is empty"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitle"
+            android:layout_margin="10dp"
+            android:text="Looks like you haven't added anything to your Addresses"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+
+
+
+</merge>

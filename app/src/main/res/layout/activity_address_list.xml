@@ -18,9 +18,11 @@
         app:titleTextColor="@android:color/white">
 
         <TextView
+            android:id="@+id/tvToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="My Address"
+            android:gravity="center"
             android:textColor="@color/black"
             android:textSize="@dimen/toolbar_title"
             android:textStyle="bold" />
@@ -63,5 +65,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+    <include layout="@layout/empty_address" />
 </androidx.constraintlayout.widget.ConstraintLayout>

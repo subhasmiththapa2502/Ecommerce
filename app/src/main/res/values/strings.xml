@@ -45,4 +45,7 @@
     <string name="header">Buy DVDs Online</string>
     <string name="allow_ecommerce_app_to_send_you_push_notification">Allow Infinity Movies App to send you push Notification</string>
     <string name="movie_list">Movie List</string>
+    <string name="gps_network_not_enabled">GPS not enabled on your phone</string>
+    <string name="open_location_settings">Open Settings and Enable for better experience</string>
+    <string name="no_address_found">No Address Saved</string>
 </resources>

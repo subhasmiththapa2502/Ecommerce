@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,6 +16,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -47,6 +49,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -70,6 +73,7 @@ public class MapViewFragment extends BottomSheetDialogFragment implements OnMapR
     private SearchView searchView;
 
     OnLocationSelectedListener mCallback;
+    private BottomSheetDialog mBottomSheetDialog;
 
     // Container Activity must implement this interface
     public interface OnLocationSelectedListener {
@@ -89,6 +93,45 @@ public class MapViewFragment extends BottomSheetDialogFragment implements OnMapR
         }
     }
 
+    public void checkIfLocationServices() {
+        LocationManager lm = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+        }
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch (Exception ex) {
+        }
+
+        if (!gps_enabled && !network_enabled) {
+            // notify user
+            final View bottomSheetLayout = getLayoutInflater().inflate(R.layout.location_bottom_sheet, null);
+            (bottomSheetLayout.findViewById(R.id.button_allow)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    requireActivity().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    mBottomSheetDialog.dismiss();
+                }
+            });
+            (bottomSheetLayout.findViewById(R.id.button_ok)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
+
+            mBottomSheetDialog = new BottomSheetDialog(requireActivity());
+            mBottomSheetDialog.setContentView(bottomSheetLayout);
+            mBottomSheetDialog.show();
+
+        }
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
@@ -106,6 +149,7 @@ public class MapViewFragment extends BottomSheetDialogFragment implements OnMapR
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
         }
+        checkIfLocationServices();
         mapView = requireView().findViewById(R.id.mapView);
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
@@ -130,27 +174,27 @@ public class MapViewFragment extends BottomSheetDialogFragment implements OnMapR
                     }
                     // on below line we are getting the location
                     // from our list a first position.
-                    if (NetworkUtil.hasNetwork(requireActivity())){
-                        if (addressList.get(0) != null){
+                    if (NetworkUtil.hasNetwork(requireActivity())) {
+                        if (addressList.get(0) != null) {
                             Address address = addressList.get(0);
 
                             // on below line we are creating a variable for our location
                             // where we will add our locations latitude and longitude.
                             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
 
-                            locationSelected = getCompleteAddressString(latLng.latitude,latLng.longitude);
+                            locationSelected = getCompleteAddressString(latLng.latitude, latLng.longitude);
                             // on below line we are adding marker to that position.
                             gmap.addMarker(new MarkerOptions().position(latLng).title(location));
 
                             // below line is to animate camera to that position.
                             gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-                        }else{
-                            ConstraintLayout coordinatorLayout= requireActivity().findViewById(R.id.constraint);
+                        } else {
+                            ConstraintLayout coordinatorLayout = requireActivity().findViewById(R.id.constraint);
                             Utils.showSnackBar(coordinatorLayout, AppConstants.SOMETHING_WENT_WRONG);
 
                         }
-                    }else {
-                        ConstraintLayout coordinatorLayout= requireActivity().findViewById(R.id.constraint);
+                    } else {
+                        ConstraintLayout coordinatorLayout = requireActivity().findViewById(R.id.constraint);
                         Utils.showSnackBar(coordinatorLayout, AppConstants.NO_INTERNET_MESSAGE);
                     }
 
@@ -214,6 +258,83 @@ public class MapViewFragment extends BottomSheetDialogFragment implements OnMapR
         } else {
             return true;
         }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+
+
+        checkIfLocationServices();
+
+
+        mapView.getMapAsync(this);
+        searchView = requireView().findViewById(R.id.idSearchView);
+
+        //SupportMapFragment mapFragment = (SupportMapFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String location = searchView.getQuery().toString();
+                List<Address> addressList = null;
+                // checking if the entered location is null or not.
+                if (location != null || location.equals("")) {
+                    // on below line we are creating and initializing a geo coder.
+                    Geocoder geocoder = new Geocoder(requireActivity());
+                    try {
+                        // on below line we are getting location from the
+                        // location name and adding that location to address list.
+                        addressList = geocoder.getFromLocationName(location, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    // on below line we are getting the location
+                    // from our list a first position.
+                    if (NetworkUtil.hasNetwork(requireActivity())) {
+                        if (addressList.get(0) != null) {
+                            Address address = addressList.get(0);
+
+                            // on below line we are creating a variable for our location
+                            // where we will add our locations latitude and longitude.
+                            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                            locationSelected = getCompleteAddressString(latLng.latitude, latLng.longitude);
+                            // on below line we are adding marker to that position.
+                            gmap.addMarker(new MarkerOptions().position(latLng).title(location));
+
+                            // below line is to animate camera to that position.
+                            gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                        } else {
+                            ConstraintLayout coordinatorLayout = requireActivity().findViewById(R.id.constraint);
+                            Utils.showSnackBar(coordinatorLayout, AppConstants.SOMETHING_WENT_WRONG);
+
+                        }
+                    } else {
+                        ConstraintLayout coordinatorLayout = requireActivity().findViewById(R.id.constraint);
+                        Utils.showSnackBar(coordinatorLayout, AppConstants.NO_INTERNET_MESSAGE);
+                    }
+
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        requireActivity().findViewById(R.id.chooseLocation).setOnClickListener(view1 -> {
+            Prefs.putString(AppConstants.RECENT_LOCATION, locationSelected);
+            //requireActivity().finish();
+
+
+            mCallback.onLocationSelected(locationSelected);
+            FragmentManager manager = requireActivity().getSupportFragmentManager();
+            manager.beginTransaction().remove(this).commit();
+        });
+
     }
 
     @Override
@@ -364,7 +485,7 @@ public class MapViewFragment extends BottomSheetDialogFragment implements OnMapR
                 if (gmap != null) {
                     gmap.clear();
                 }
-                Toast.makeText(requireActivity(), "Camera is moving", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(requireActivity(), "Camera is moving", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -386,7 +507,7 @@ public class MapViewFragment extends BottomSheetDialogFragment implements OnMapR
                 double latitude = mPosition.latitude;
                 double longitude = mPosition.longitude;
 
-                locationSelected = getCompleteAddressString(latitude,longitude);
+                locationSelected = getCompleteAddressString(latitude, longitude);
 //                Toast.makeText(requireActivity(), "mPosition is" + getCompleteAddressString(latitude,longitude), Toast.LENGTH_SHORT).show();
             }
         });

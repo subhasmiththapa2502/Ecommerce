@@ -9,6 +9,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +48,8 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
     ArrayList<String> address = new ArrayList<>();
     TinyDB tinydb;
     ProgressBar progress_circular;
+    RelativeLayout errorLayout;
+    TextView tvToolbar;
     private static String TAG = AddressListActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,14 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
             }
         }
 
+        if (address.isEmpty()){
+            errorLayout.setVisibility(View.VISIBLE);
+            tvToolbar.setVisibility(View.GONE);
+
+        }else {
+            errorLayout.setVisibility(View.GONE);
+            tvToolbar.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -105,13 +117,15 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
         }
         progress_circular = findViewById(R.id.progress_circular);
         customiseToolBar();
-
+        errorLayout = findViewById(R.id.error_layout);
+        tvToolbar = findViewById(R.id.tvToolbar);
         Utils.changeStatusBarColour(this);
 
         findViewById(R.id.addAddress).setOnClickListener(view -> {
 
             if(NetworkUtil.isNetworkConnected(this)){
                 findViewById(R.id.addAddress).setVisibility(View.GONE);
+                errorLayout.setVisibility(View.GONE);
                 progress_circular.setVisibility(View.VISIBLE);
                 Handler handler = new Handler();
                 Runnable runnable = () -> progress_circular.setVisibility(View.GONE);
@@ -177,7 +191,7 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
     public void onLocationSelected(String location) {
         if (NetworkUtil.isNetworkConnected(this)){
             findViewById(R.id.addAddress).setVisibility(View.VISIBLE);
-
+            tvToolbar.setVisibility(View.VISIBLE);
             address.add(location);
             tinydb.putListString(AppConstants.LOCATION_LIST, address);
             progress_circular.setVisibility(View.GONE);

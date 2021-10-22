@@ -83,7 +83,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:foregroundGravity="center"
-          android:src="@drawable/empty_cart"/>
+          android:src="@drawable/empty_cart" />
 
       <TextView
           android:id="@+id/tvTitle"
