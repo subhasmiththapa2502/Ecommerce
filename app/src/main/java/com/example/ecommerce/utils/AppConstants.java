@@ -19,6 +19,7 @@ public class AppConstants {
     public static String BASE_URL_IMG = "https://image.tmdb.org/t/p/w200";
     public static String BASE_URL_IMG_POSTER = "https://image.tmdb.org/t/p/w780";
     public static String NO_INTERNET_MESSAGE = "Please check your Internet and try again";
+    public static String PERMISSION_MESSAGE = "Notification Permission already allowed";
 
 
 

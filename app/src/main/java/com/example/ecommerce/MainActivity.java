@@ -15,11 +15,14 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
@@ -36,6 +39,7 @@ import com.example.ecommerce.utils.NetworkUtil;
 import com.example.ecommerce.utils.PaginationAdapterCallback;
 import com.example.ecommerce.utils.Prefs;
 import com.example.ecommerce.utils.Utils;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import java.util.List;
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
 
     int cart_count = 2;
     private NotificationManagerCompat mNotificationManagerCompat;
+    private BottomSheetDialog mBottomSheetDialog;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -219,7 +225,38 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
     public void askForNotificationPermission(){
         boolean areNotificationsEnabled = mNotificationManagerCompat.areNotificationsEnabled();
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        View bottomSheet = findViewById(R.id.your_placeholder);
+
+
+        final View bottomSheetLayout = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+        (bottomSheetLayout.findViewById(R.id.button_allow)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //mBottomSheetDialog.dismiss();
+                if (!areNotificationsEnabled){
+                    openNotificationAndSettingPage();
+                }else{
+                    ConstraintLayout viewCons= findViewById(R.id.constraint);
+                    Utils.showSnackBar(viewCons,AppConstants.PERMISSION_MESSAGE);
+                }
+                mBottomSheetDialog.dismiss();
+            }
+        });
+        (bottomSheetLayout.findViewById(R.id.button_ok)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!areNotificationsEnabled){
+                    openNotificationAndSettingPage();
+                    mBottomSheetDialog.dismiss();
+                }
+//                Toast.makeText(getApplicationContext(), "Ok button clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mBottomSheetDialog = new BottomSheetDialog(this);
+        mBottomSheetDialog.setContentView(bottomSheetLayout);
+        mBottomSheetDialog.show();
+/*            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setMessage("Allow Ecommerce App to send you push Notification");
 // Add the buttons
             builder.setPositiveButton(R.string.ok, (dialog, id) -> {
@@ -237,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
 
 // Create the AlertDialog
             AlertDialog dialog = builder.create();
-            dialog.show();
+            dialog.show();*/
     }
 
     @Override
