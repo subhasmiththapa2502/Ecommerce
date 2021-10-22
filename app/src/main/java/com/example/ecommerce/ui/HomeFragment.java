@@ -39,6 +39,7 @@ import com.example.ecommerce.model.Result;
 import com.example.ecommerce.model.TopRatedMovies;
 import com.example.ecommerce.utils.PaginationAdapterCallback;
 import com.example.ecommerce.utils.PaginationScrollListener;
+import com.example.ecommerce.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +112,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
         init();
+        Utils.checkForRTL(requireActivity());
     }
 
     @Override

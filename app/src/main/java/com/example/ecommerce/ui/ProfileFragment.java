@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.ecommerce.R;
 import com.example.ecommerce.utils.AppConstants;
 import com.example.ecommerce.utils.Prefs;
+import com.example.ecommerce.utils.Utils;
 
 import java.util.Objects;
 
@@ -104,6 +105,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         }
 
 
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            Utils.checkForRTL(requireActivity());
+        }
     }
 
     @Override

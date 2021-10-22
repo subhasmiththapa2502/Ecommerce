@@ -70,6 +70,12 @@ public class ListActivity extends AppCompatActivity implements PaginationAdapter
         init();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Utils.checkForRTL(this);
+    }
+
     public void init() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         // Sets the Toolbar to act as the ActionBar for this Activity window.

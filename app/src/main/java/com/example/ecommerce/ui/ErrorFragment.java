@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.ecommerce.R;
+import com.example.ecommerce.utils.Utils;
 
 /**
  * Created by Subhasmith Thapa on 21,October,2021
@@ -29,5 +30,13 @@ public class ErrorFragment extends Fragment {
 
     private void init() {
 
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            Utils.checkForRTL(requireActivity());
+        }
     }
 }

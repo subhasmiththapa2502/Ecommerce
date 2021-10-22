@@ -281,4 +281,10 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
     public void retryPageLoad() {
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Utils.checkForRTL(this);
+    }
 }

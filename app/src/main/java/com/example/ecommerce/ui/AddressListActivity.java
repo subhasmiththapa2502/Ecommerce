@@ -56,7 +56,6 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_list);
         ButterKnife.bind(this);
-        checkForRTL();
         init();
         setUp();
     }
@@ -165,6 +164,7 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
     @Override
     protected void onResume() {
         super.onResume();
+        Utils.checkForRTL(this);
     }
 
     @Override

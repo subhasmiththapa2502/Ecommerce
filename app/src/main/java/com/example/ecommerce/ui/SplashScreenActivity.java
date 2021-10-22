@@ -36,4 +36,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
         finish();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Utils.checkForRTL(this);
+    }
 }

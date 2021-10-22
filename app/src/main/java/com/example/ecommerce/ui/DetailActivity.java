@@ -34,6 +34,7 @@ import com.example.ecommerce.utils.CircleAnimationUtil;
 import com.example.ecommerce.utils.Converter;
 import com.example.ecommerce.utils.GlideApp;
 import com.example.ecommerce.utils.PaginationScrollListener;
+import com.example.ecommerce.utils.Utils;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.List;
@@ -88,6 +89,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Utils.checkForRTL(this);
 
     }
 

@@ -264,6 +264,9 @@ public class MapViewFragment extends BottomSheetDialogFragment implements OnMapR
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
 
+        if(!hidden){
+            Utils.checkForRTL(requireActivity());
+        }
 
 
         checkIfLocationServices();

@@ -66,4 +66,17 @@ public class Utils {
         view.setLayoutParams(params);
         snack.show();
     }
+
+    public static void checkForRTL(Activity activity) {
+        String language = Prefs.getString(AppConstants.LANGUAGE);
+        if (language.equals(AppConstants.LANGUAGE_ARABIC)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                activity.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                activity.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
+        }
+    }
 }

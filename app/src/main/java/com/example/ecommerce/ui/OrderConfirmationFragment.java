@@ -103,4 +103,12 @@ public class OrderConfirmationFragment extends BottomSheetDialogFragment {
         requireActivity().finish();
 */
     }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            Utils.checkForRTL(requireActivity());
+        }
+    }
 }

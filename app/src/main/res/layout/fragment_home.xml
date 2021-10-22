@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="20dp"
@@ -63,10 +63,11 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/mostPopularSeeAll"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="10dp"
+                        android:layout_alignParentEnd="true"
                         android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
                         android:gravity="end|center"
                         android:text="See All"
@@ -91,7 +92,7 @@
                     android:layout_marginEnd="10dp">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:text="Now Playing"
@@ -99,9 +100,10 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/nowPlayingSeeAll"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
+                        android:layout_alignParentEnd="true"
                         android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
                         android:gravity="end|center"
                         android:text="See All"
@@ -126,7 +128,7 @@
                     android:layout_marginEnd="10dp">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:text="Latest Movies"
@@ -134,7 +136,8 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/latestMoviesSeeAll"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_alignParentEnd="true"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:drawableEnd="@drawable/ic_baseline_chevron_right_24"

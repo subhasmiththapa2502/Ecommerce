@@ -50,6 +50,12 @@ public class CartActivity extends AppCompatActivity implements CartAdapterWithFo
         getCartItems();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Utils.checkForRTL(this);
+    }
+
     public void init() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
