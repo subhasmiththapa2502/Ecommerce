@@ -316,6 +316,8 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 Result result = response.body();
+                imagePath = AppConstants.BASE_URL_IMG+result.getBackdropPath();
+                cost = result.getVoteCount();
                 init(result.getTitle());
                 checkIfItemExistsInDb();
                 setUI(result.getTitle(), result.getOverview(), result.getVoteCount(),result.getPosterPath());
