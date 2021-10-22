@@ -4,10 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,6 +42,7 @@ import com.example.ecommerce.utils.Utils;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -338,6 +343,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Result> call, Throwable t) {
                 t.printStackTrace();
+                showSnackBar(t);
 
             }
         });
@@ -384,6 +390,37 @@ public class DetailActivity extends AppCompatActivity {
 
         GetTasks gt = new GetTasks();
         gt.execute();
+    }
+
+    private void showSnackBar(Throwable t){
+        CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
+        Utils.showSnackBar(coordinatorLayout,fetchErrorMessage(t));
+    }
+
+    /**
+     * @param throwable to identify the type of error
+     * @return appropriate error message
+     */
+    private String fetchErrorMessage(Throwable throwable) {
+        String errorMsg = getResources().getString(R.string.error_msg_unknown);
+
+        if (!isNetworkConnected()) {
+            errorMsg = getResources().getString(R.string.error_msg_no_internet);
+        } else if (throwable instanceof TimeoutException) {
+            errorMsg = getResources().getString(R.string.error_msg_timeout);
+        }
+
+        return errorMsg;
+    }
+
+    /**
+     * Remember to add android.permission.ACCESS_NETWORK_STATE permission.
+     *
+     * @return
+     */
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 }
 

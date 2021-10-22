@@ -2,6 +2,7 @@ package com.example.ecommerce.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -146,8 +148,13 @@ public class ListActivity extends AppCompatActivity implements PaginationAdapter
             public void onFailure(Call<TopRatedMovies> call, Throwable t) {
                 t.printStackTrace();
                 showErrorView(t);
+                showSnackBar(t);
             }
         });
+    }
+    private void showSnackBar(Throwable t){
+        ConstraintLayout constraintLayout = findViewById(R.id.constraint);
+        Utils.showSnackBar(constraintLayout,fetchErrorMessage(t));
     }
     private void setUpTopRatedRecyclerView(){
         paginationAdapterListActivity = new PaginationAdapterListActivity(ListActivity.this);
@@ -205,6 +212,7 @@ public class ListActivity extends AppCompatActivity implements PaginationAdapter
             @Override
             public void onFailure(Call<TopRatedMovies> call, Throwable t) {
                 t.printStackTrace();
+                showSnackBar(t);
                 paginationAdapterListActivity.showRetry(true, fetchErrorMessage(t));
             }
         });

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -363,6 +364,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             public void onFailure(Call<LatestMovies> call, Throwable t) {
                 t.printStackTrace();
                 showErrorView(t);
+                showSnackBar(t);
             }
         });
     }
@@ -385,11 +387,16 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             public void onFailure(Call<NowPlaying> call, Throwable t) {
                 t.printStackTrace();
                 showErrorView(t);
+                showSnackBar(t);
             }
         });
 
     }
 
+    private void showSnackBar(Throwable t){
+        FrameLayout frameLayout = requireActivity().findViewById(R.id.frameLL);
+        Utils.showSnackBar(frameLayout,fetchErrorMessage(t));
+    }
     private void loadFirstPage() {
         Log.d(TAG, "loadFirstPage: ");
 
@@ -417,6 +424,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             public void onFailure(Call<TopRatedMovies> call, Throwable t) {
                 t.printStackTrace();
                 showErrorView(t);
+                showSnackBar(t);
             }
         });
     }
@@ -535,6 +543,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             @Override
             public void onFailure(Call<NowPlaying> call, Throwable t) {
                 t.printStackTrace();
+                showSnackBar(t);
                 adapterNowPlaying.showRetry(true, fetchErrorMessage(t));
             }
         });
@@ -559,6 +568,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             public void onFailure(Call<LatestMovies> call, Throwable t) {
                 t.printStackTrace();
                 adapter.showRetry(true, fetchErrorMessage(t));
+                showSnackBar(t);
             }
         });
     }
@@ -586,6 +596,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             public void onFailure(Call<TopRatedMovies> call, Throwable t) {
                 t.printStackTrace();
                 adapter.showRetry(true, fetchErrorMessage(t));
+                showSnackBar(t);
             }
         });
     }
