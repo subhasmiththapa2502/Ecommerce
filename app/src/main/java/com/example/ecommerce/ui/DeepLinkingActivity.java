@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.api.MovieApi;
@@ -68,8 +69,13 @@ public class DeepLinkingActivity extends AppCompatActivity {
 
         if (data != null){
 
-            id = extractIdFromData(data);
-            callMovieDetailsApi();
+            try {
+                id = extractIdFromData(data);
+                callMovieDetailsApi();
+            } catch (Exception e) {
+                Toast.makeText(this, "No Movies Found", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
 
         }else{
             String title = getIntent().getStringExtra(AppConstants.TITLE);
@@ -384,8 +390,7 @@ public class DeepLinkingActivity extends AppCompatActivity {
     }
 
     private void showSnackBar(Throwable t){
-        CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
-        Utils.showSnackBar(coordinatorLayout,fetchErrorMessage(t));
+        Toast.makeText(this, fetchErrorMessage(t), Toast.LENGTH_SHORT).show();
     }
 
     /**

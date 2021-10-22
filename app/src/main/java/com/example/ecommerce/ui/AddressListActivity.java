@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -137,8 +138,9 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
                 fragmentTransaction.addToBackStack(TAG);
                 fragmentTransaction.commit();
             }else{
-                ConstraintLayout viewCons= findViewById(R.id.constraint);
-                Utils.showSnackBar(viewCons,AppConstants.NO_INTERNET_MESSAGE);
+                Toast.makeText(this, AppConstants.NO_INTERNET_MESSAGE, Toast.LENGTH_SHORT).show();
+                //ConstraintLayout viewCons= findViewById(R.id.constraint);
+                //Utils.showSnackBar(viewCons,AppConstants.NO_INTERNET_MESSAGE);
 
             }
 
@@ -148,8 +150,7 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
         if(NetworkUtil.isNetworkConnected(this)){
 
         }else{
-            ConstraintLayout view= findViewById(R.id.constraint);
-            Utils.showSnackBar(view,AppConstants.NO_INTERNET_MESSAGE);;
+            Toast.makeText(this, AppConstants.NO_INTERNET_MESSAGE, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -205,9 +206,7 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
         }else {
             findViewById(R.id.addAddress).setVisibility(View.VISIBLE);
 
-
-            ConstraintLayout coordinatorLayout= findViewById(R.id.constraint);
-            Utils.showSnackBar(coordinatorLayout,AppConstants.NO_INTERNET_MESSAGE);
+            Toast.makeText(this, AppConstants.NO_INTERNET_MESSAGE, Toast.LENGTH_SHORT).show();
         }
 
     }

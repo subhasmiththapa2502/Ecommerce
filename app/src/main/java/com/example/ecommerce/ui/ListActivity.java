@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ecommerce.MainActivity;
 import com.example.ecommerce.R;
@@ -153,8 +154,7 @@ public class ListActivity extends AppCompatActivity implements PaginationAdapter
         });
     }
     private void showSnackBar(Throwable t){
-        ConstraintLayout constraintLayout = findViewById(R.id.constraint);
-        Utils.showSnackBar(constraintLayout,fetchErrorMessage(t));
+        Toast.makeText(this, fetchErrorMessage(t), Toast.LENGTH_SHORT).show();
     }
     private void setUpTopRatedRecyclerView(){
         paginationAdapterListActivity = new PaginationAdapterListActivity(ListActivity.this);

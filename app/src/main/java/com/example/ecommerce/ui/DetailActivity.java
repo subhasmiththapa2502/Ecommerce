@@ -397,8 +397,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void showSnackBar(Throwable t){
-        CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
-        Utils.showSnackBar(coordinatorLayout,fetchErrorMessage(t));
+        Toast.makeText(this, fetchErrorMessage(t), Toast.LENGTH_SHORT).show();
     }
 
     /**

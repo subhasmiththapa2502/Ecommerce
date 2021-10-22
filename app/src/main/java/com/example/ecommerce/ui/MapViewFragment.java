@@ -189,13 +189,12 @@ public class MapViewFragment extends BottomSheetDialogFragment implements OnMapR
                             // below line is to animate camera to that position.
                             gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                         } else {
-                            ConstraintLayout coordinatorLayout = requireActivity().findViewById(R.id.constraint);
-                            Utils.showSnackBar(coordinatorLayout, AppConstants.SOMETHING_WENT_WRONG);
+                            Toast.makeText(requireActivity(), AppConstants.SOMETHING_WENT_WRONG, Toast.LENGTH_SHORT).show();
+
 
                         }
                     } else {
-                        ConstraintLayout coordinatorLayout = requireActivity().findViewById(R.id.constraint);
-                        Utils.showSnackBar(coordinatorLayout, AppConstants.NO_INTERNET_MESSAGE);
+                        Toast.makeText(requireActivity(), AppConstants.NO_INTERNET_MESSAGE, Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -309,13 +308,12 @@ public class MapViewFragment extends BottomSheetDialogFragment implements OnMapR
                             // below line is to animate camera to that position.
                             gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                         } else {
-                            ConstraintLayout coordinatorLayout = requireActivity().findViewById(R.id.constraint);
-                            Utils.showSnackBar(coordinatorLayout, AppConstants.SOMETHING_WENT_WRONG);
+                            Toast.makeText(requireActivity(), AppConstants.SOMETHING_WENT_WRONG, Toast.LENGTH_SHORT).show();
+
 
                         }
                     } else {
-                        ConstraintLayout coordinatorLayout = requireActivity().findViewById(R.id.constraint);
-                        Utils.showSnackBar(coordinatorLayout, AppConstants.NO_INTERNET_MESSAGE);
+                        Toast.makeText(requireActivity(), AppConstants.NO_INTERNET_MESSAGE, Toast.LENGTH_SHORT).show();
                     }
 
                 }

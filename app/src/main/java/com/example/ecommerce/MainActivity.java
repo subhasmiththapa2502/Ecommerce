@@ -236,8 +236,8 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
                 if (!areNotificationsEnabled){
                     openNotificationAndSettingPage();
                 }else{
-                    ConstraintLayout viewCons= findViewById(R.id.constraint);
-                    Utils.showSnackBar(viewCons,AppConstants.PERMISSION_MESSAGE);
+                    //ConstraintLayout viewCons= findViewById(R.id.constraint);
+                    //Utils.showSnackBar(viewCons,AppConstants.PERMISSION_MESSAGE);
                 }
                 mBottomSheetDialog.dismiss();
             }
