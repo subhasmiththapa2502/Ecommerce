@@ -3,13 +3,16 @@ package com.example.ecommerce.utils;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Build;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import androidx.core.content.ContextCompat;
 
 import com.example.ecommerce.R;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Created by Subhasmith Thapa on 19,October,2021
@@ -41,5 +44,14 @@ public class Utils {
             //    decor.setSystemUiVisibility(0);
             //}
         }
+    }
+
+    public static void showSnackBar(View viewProvided, String errorMessage){
+        Snackbar snack = Snackbar.make(viewProvided, errorMessage, Snackbar.LENGTH_LONG);
+        View view = snack.getView();
+        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)view.getLayoutParams();
+        params.gravity = Gravity.TOP;
+        view.setLayoutParams(params);
+        snack.show();
     }
 }

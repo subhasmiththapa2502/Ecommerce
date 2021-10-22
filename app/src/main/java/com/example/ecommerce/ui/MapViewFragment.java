@@ -16,13 +16,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -30,24 +34,30 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.utils.AppConstants;
+import com.example.ecommerce.utils.NetworkUtil;
 import com.example.ecommerce.utils.Prefs;
+import com.example.ecommerce.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 /**
  * Created by Subhasmith Thapa on 20,October,2021
  */
-public class MapViewFragment extends Fragment implements OnMapReadyCallback {
+public class MapViewFragment extends BottomSheetDialogFragment implements OnMapReadyCallback {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
     private GoogleMap.OnCameraIdleListener onCameraIdleListener;
@@ -57,6 +67,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private LatLng latLng;
     private LocationManager locationManager;
     private String locationSelected;
+    private SearchView searchView;
 
     OnLocationSelectedListener mCallback;
 
@@ -98,6 +109,60 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mapView = requireView().findViewById(R.id.mapView);
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
+        searchView = requireView().findViewById(R.id.idSearchView);
+
+        //SupportMapFragment mapFragment = (SupportMapFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String location = searchView.getQuery().toString();
+                List<Address> addressList = null;
+                // checking if the entered location is null or not.
+                if (location != null || location.equals("")) {
+                    // on below line we are creating and initializing a geo coder.
+                    Geocoder geocoder = new Geocoder(requireActivity());
+                    try {
+                        // on below line we are getting location from the
+                        // location name and adding that location to address list.
+                        addressList = geocoder.getFromLocationName(location, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    // on below line we are getting the location
+                    // from our list a first position.
+                    if (NetworkUtil.hasNetwork(requireActivity())){
+                        if (addressList.get(0) != null){
+                            Address address = addressList.get(0);
+
+                            // on below line we are creating a variable for our location
+                            // where we will add our locations latitude and longitude.
+                            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                            locationSelected = getCompleteAddressString(latLng.latitude,latLng.longitude);
+                            // on below line we are adding marker to that position.
+                            gmap.addMarker(new MarkerOptions().position(latLng).title(location));
+
+                            // below line is to animate camera to that position.
+                            gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                        }else{
+                            ConstraintLayout coordinatorLayout= requireActivity().findViewById(R.id.constraint);
+                            Utils.showSnackBar(coordinatorLayout, AppConstants.SOMETHING_WENT_WRONG);
+
+                        }
+                    }else {
+                        ConstraintLayout coordinatorLayout= requireActivity().findViewById(R.id.constraint);
+                        Utils.showSnackBar(coordinatorLayout, AppConstants.NO_INTERNET_MESSAGE);
+                    }
+
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         requireActivity().findViewById(R.id.chooseLocation).setOnClickListener(view1 -> {
             Prefs.putString(AppConstants.RECENT_LOCATION, locationSelected);

@@ -1,14 +1,19 @@
 package com.example.ecommerce.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -19,9 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerce.R;
 import com.example.ecommerce.adapter.AddressListAdapter;
 import com.example.ecommerce.utils.AppConstants;
+import com.example.ecommerce.utils.NetworkUtil;
 import com.example.ecommerce.utils.Prefs;
 import com.example.ecommerce.utils.TinyDB;
 import com.example.ecommerce.utils.Utils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -30,6 +37,7 @@ import butterknife.ButterKnife;
 
 public class AddressListActivity extends AppCompatActivity implements MapViewFragment.OnLocationSelectedListener, AddressListAdapter.OnItemClickListener {
 
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.rvAddressList)
     RecyclerView mRecyclerView;
 
@@ -37,6 +45,8 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
     LinearLayoutManager mLayoutManager;
     ArrayList<String> address = new ArrayList<>();
     TinyDB tinydb;
+    ProgressBar progress_circular;
+    private static String TAG = AddressListActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +57,15 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
         setUp();
     }
 
-    private void checkForRTL(){
+    @SuppressLint("ObsoleteSdkInt")
+    private void checkForRTL() {
         String language = Prefs.getString(AppConstants.LANGUAGE);
-        if(language.equals(AppConstants.LANGUAGE_ARABIC)){
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+        if (language.equals(AppConstants.LANGUAGE_ARABIC)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             }
-        }else {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             }
         }
@@ -74,11 +85,11 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
         myRecyclerViewAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(myRecyclerViewAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        for(String str : address){
-            if(!str.equals("")){
-                if(myRecyclerViewAdapter.getItemCount()>1){
+        for (String str : address) {
+            if (!str.equals("")) {
+                if (myRecyclerViewAdapter.getItemCount() > 1) {
                     myRecyclerViewAdapter.add(myRecyclerViewAdapter.getItemCount(), str);
-                }else{
+                } else {
                     myRecyclerViewAdapter.add(0, str);
                 }
             }
@@ -87,39 +98,54 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
 
     }
 
-    public void init(){
+    public void init() {
         tinydb = new TinyDB(AddressListActivity.this);
-        if(tinydb.getListString(AppConstants.LOCATION_LIST) != null){
+        if (tinydb.getListString(AppConstants.LOCATION_LIST) != null) {
             address = tinydb.getListString(AppConstants.LOCATION_LIST);
         }
+        progress_circular = findViewById(R.id.progress_circular);
         customiseToolBar();
 
         Utils.changeStatusBarColour(this);
 
         findViewById(R.id.addAddress).setOnClickListener(view -> {
-        findViewById(R.id.addAddress).setVisibility(View.GONE);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
-        fragmentTransaction.add(R.id.your_placeholder, new MapViewFragment());
-        fragmentTransaction.commit();
+
+            if(NetworkUtil.isNetworkConnected(this)){
+                findViewById(R.id.addAddress).setVisibility(View.GONE);
+                progress_circular.setVisibility(View.VISIBLE);
+                Handler handler = new Handler();
+                Runnable runnable = () -> progress_circular.setVisibility(View.GONE);
+                handler.postDelayed(runnable, 2000);
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
+                fragmentTransaction.replace(R.id.your_placeholder, new MapViewFragment());
+                fragmentTransaction.addToBackStack(TAG);
+                fragmentTransaction.commit();
+            }else{
+                ConstraintLayout viewCons= findViewById(R.id.constraint);
+                Utils.showSnackBar(viewCons,AppConstants.NO_INTERNET_MESSAGE);
+
+            }
+
 
         });
 
+        if(NetworkUtil.isNetworkConnected(this)){
+
+        }else{
+            ConstraintLayout view= findViewById(R.id.constraint);
+            Utils.showSnackBar(view,AppConstants.NO_INTERNET_MESSAGE);;
+        }
     }
 
-    public void customiseToolBar(){
+    public void customiseToolBar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-
         // Customize the back button
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_chevron_left_24);
-
-        // showing the back button in action bar
-        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -149,17 +175,25 @@ public class AddressListActivity extends AppCompatActivity implements MapViewFra
 
     @Override
     public void onLocationSelected(String location) {
-        findViewById(R.id.addAddress).setVisibility(View.VISIBLE);
+        if (NetworkUtil.isNetworkConnected(this)){
+            findViewById(R.id.addAddress).setVisibility(View.VISIBLE);
 
-        address.add(location);
-        tinydb.putListString(AppConstants.LOCATION_LIST, address);
-
-        if(!location.equals("")){
-            if(myRecyclerViewAdapter.getItemCount()>1){
-                myRecyclerViewAdapter.add(myRecyclerViewAdapter.getItemCount(), location);
-            }else{
-                myRecyclerViewAdapter.add(0, location);
+            address.add(location);
+            tinydb.putListString(AppConstants.LOCATION_LIST, address);
+            progress_circular.setVisibility(View.GONE);
+            if (!location.equals("")) {
+                if (myRecyclerViewAdapter.getItemCount() > 1) {
+                    myRecyclerViewAdapter.add(myRecyclerViewAdapter.getItemCount(), location);
+                } else {
+                    myRecyclerViewAdapter.add(0, location);
+                }
             }
+        }else {
+            findViewById(R.id.addAddress).setVisibility(View.VISIBLE);
+
+
+            ConstraintLayout coordinatorLayout= findViewById(R.id.constraint);
+            Utils.showSnackBar(coordinatorLayout,AppConstants.NO_INTERNET_MESSAGE);
         }
 
     }
