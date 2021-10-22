@@ -1,16 +1,27 @@
 package com.example.ecommerce;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.ecommerce.database.CartItem;
@@ -37,7 +48,9 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
     ChipNavigationBar chipNavigationBar;
 
     int cart_count = 2;
+    private NotificationManagerCompat mNotificationManagerCompat;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onResume() {
         super.onResume();
@@ -67,41 +80,29 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
                             new ErrorFragment()).commit();
         }
         bottomMenu();
-        /*// Begin the transaction
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-// Replace the contents of the container with the new fragment
-        ft.replace(R.id.your_placeholder, new ProfileFragment());
-// or ft.add(R.id.your_placeholder, new FooFragment());
-// Complete the changes added above
-        ft.commit();*/
+        mNotificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
     }
 
     private void bottomMenu() {
         chipNavigationBar.setOnItemSelectedListener
-                (new ChipNavigationBar.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(int i) {
-                        Fragment fragment = null;
-                        switch (i){
-                            case R.id.home:
-                                fragment = new HomeFragment();
-                                break;
-                            case R.id.profile:
-                                fragment = new ProfileFragment();
-                                break;
-                        }
-                        if (NetworkUtil.hasNetwork(MainActivity.this)){
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.your_placeholder,
-                                            fragment).commit();
-                        }else {
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.your_placeholder,
-                                            new ErrorFragment()).commit();
-                        }
-                        /*getSupportFragmentManager().beginTransaction()
+                (i -> {
+                    Fragment fragment = null;
+                    switch (i){
+                        case R.id.home:
+                            fragment = new HomeFragment();
+                            break;
+                        case R.id.profile:
+                            fragment = new ProfileFragment();
+                            break;
+                    }
+                    if (NetworkUtil.hasNetwork(MainActivity.this)){
+                        getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.your_placeholder,
-                                        fragment).commit();*/
+                                        fragment).commit();
+                    }else {
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.your_placeholder,
+                                        new ErrorFragment()).commit();
                     }
                 });
     }
@@ -171,28 +172,72 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
         return true;
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void createNotification(){
+
+        int notifyID = 1;
+        String CHANNEL_ID = "my_channel_01";// The id of the channel.
+        CharSequence name = getString(R.string.channel_name);// The user-visible name of the channel.
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+// Create a notification and set the notification channel.
+        Notification notification = new Notification.Builder(MainActivity.this)
+                .setContentTitle("New Message")
+                .setContentText("Welcome to Infinity Movies")
+                .setSmallIcon(R.drawable.ic_shopping_cart)
+                .setChannelId(CHANNEL_ID)
+                .build();
+
+
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mNotificationManager.createNotificationChannel(mChannel);
+
+            mNotificationManager.createNotificationChannel(mChannel);
+
+// Issue the notification.
+            mNotificationManager.notify(notifyID , notification);
+
+        }
+    }
+    public void openNotificationAndSettingPage(){
+        //Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        //Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
+        //intent.setData(uri);
+        //startActivity(intent);
+
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivity(intent);
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void askForNotificationPermission(){
+        boolean areNotificationsEnabled = mNotificationManagerCompat.areNotificationsEnabled();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setMessage("Allow Ecommerce App to send you push Notification");
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setMessage("Allow Ecommerce App to send you push Notification");
 // Add the buttons
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+            builder.setPositiveButton(R.string.ok, (dialog, id) -> {
+                if (!areNotificationsEnabled){
+                    openNotificationAndSettingPage();
+                }
                 // User clicked OK button
-
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+                createNotification();
+            });
+            builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
                 // User cancelled the dialog
-            }
-        });
+            });
 // Set other dialog properties
 
 
 // Create the AlertDialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            AlertDialog dialog = builder.create();
+            dialog.show();
     }
 
     @Override
