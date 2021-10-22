@@ -18,7 +18,9 @@
         android:theme="@style/Theme.Ecommerce">
         <activity
             android:name=".ui.DeepLinkingActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -45,6 +47,8 @@
         <activity
             android:name=".ui.SplashScreenActivity"
             android:exported="true"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,14 +57,20 @@
             </intent-filter>
         </activity>
         <activity
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:name=".ui.CartActivity"
             android:exported="false" />
         <activity
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:name=".ui.DetailActivity"
             android:exported="false">
 
         </activity>
         <activity
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:name=".ui.ListActivity"
             android:exported="false" />
 
@@ -69,9 +79,13 @@
             android:value="AIzaSyAIgka8RiR2STnzNWn82obPsQ061EIMO0c" />
 
         <activity
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:name=".ui.AddressListActivity"
             android:exported="false" />
         <activity
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:exported="false"></activity>
     </application>
